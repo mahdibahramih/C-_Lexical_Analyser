@@ -10,6 +10,7 @@ word =""
 col = 0
 row = 0 
 blok = 0
+blocks =[0]
 token = {'type':'' , 'col':'' , 'row':'' , 'block':'' , 'text':''}
 
 def write_to_file():
@@ -17,7 +18,7 @@ def write_to_file():
         out_file.write('     column   :   '+token['col']+'\n')
         out_file.write('     row      :   '+token['row']+'\n')
         out_file.write('     type     :   '+token['type']+'\n')
-        out_file.write('     block    :   '+str(blok)+'\n')
+        out_file.write('     block    :   '+str(blocks[-1])+'\n')
         out_file.write('----------------------------------\n')
         token['text']=""
         token['type'] = "" 
@@ -96,9 +97,10 @@ for kalame in source_file:
                                 continue
                         elif(isdelimeter(harf)):
                                 if harf == '{' :
-                                        blok += 1 
+                                        blok += 1
+                                        blocks.append(blok) 
                                 if harf == '}' :
-                                        blok -= 1 
+                                        a=blocks.pop()
                                 token['text'] = harf
                                 token['col'] = str(col)
                                 token['row'] = str(row)
@@ -108,8 +110,6 @@ for kalame in source_file:
                                 state = 0
                                 continue
                         
-                                
-
                 if(state == 1):
                         if(isoperator(harf)):
                                 token['text'] += harf 
@@ -120,8 +120,6 @@ for kalame in source_file:
                                 write_to_file()
                                 col += 1
                                 state =0
-                                
-
 
                 if(state == 2):
                         if(harf.isdigit()):
